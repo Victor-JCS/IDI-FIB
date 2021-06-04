@@ -1,79 +1,35 @@
-#define GLM_FORCE_RADIANS
-#include <QOpenGLFunctions_3_3_Core>
-#include <QOpenGLWidget>
-#include <QOpenGLShader>
-#include <QOpenGLShaderProgram>
-#include <QKeyEvent>
-#include <QMouseEvent>
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
+#include "ExamGLWidget.h"
 
-#include "model.h"
-
-class MyGLWidget : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core
+class MyGLWidget:public ExamGLWidget
 {
   Q_OBJECT
 
   public:
-    MyGLWidget (QWidget *parent=0);
-    ~MyGLWidget ();
+    MyGLWidget(QWidget *parent=0) : ExamGLWidget(parent) {}
+    ~MyGLWidget();
   public slots:
-
-    void patricio1 ();
-    void patricio2 ();
-    void patricio3 ();
-    void patricio4 ();
-    void reset ();
+    void cam ();
+    void cub_1 ();
+    void cub_2 ();
+    void cub_3 ();
 
   protected:
-    // initializeGL - Aqui incluim les inicialitzacions del contexte grafic.
-    virtual void initializeGL ( );
-    // paintGL - Mètode cridat cada cop que cal refrescar la finestra.
-    // Tot el que es dibuixa es dibuixa aqui.
-    virtual void paintGL ( );
-    // resizeGL - És cridat quan canvia la mida del widget
-    virtual void resizeGL (int width, int height);
-    // keyPressEvent - Es cridat quan es prem una tecla
-    virtual void keyPressEvent (QKeyEvent *event);
-    // mouse{Press/Release/Move}Event - Són cridades quan es realitza l'event
-    // corresponent de ratolí
-    virtual void mousePressEvent (QMouseEvent *event);
-    virtual void mouseReleaseEvent (QMouseEvent *event);
-    virtual void mouseMoveEvent (QMouseEvent *event);
+    virtual void paintGL ();
+    virtual void keyPressEvent(QKeyEvent* event);
+    virtual void modelTransformCub (float escala, float angle);
+    virtual void modelTransformPatricio ();
+    virtual void projectTransform ();
+    virtual void viewTransform ();
 
   private:
-    void createBuffersModel ();
-    void createBuffersTerra ();
-    void carregaShaders ();
-    void iniEscena ();
-    void iniCamera ();
-    void projectTransform ();
-    void viewTransform ();
-    void modelTransformIdent ();
-    void modelTransformModel (float esc, float ang);
-    void calculaCapsaModel (Model &p, float &escala, glm::vec3 &CentreBase);
-
-    // VAO i VBO names
-    GLuint VAO_Model;
-    GLuint VAO_Terra;
-    // Program
-    QOpenGLShaderProgram *program;
-    // uniform locations
-    GLuint transLoc, projLoc, viewLoc;
-    // attribute locations
-    GLuint vertexLoc, normalLoc, matambLoc, matdiffLoc, matspecLoc, matshinLoc;
-
-    // model
-    Model m;
-    // paràmetres calculats a partir de la capsa contenidora del model
-    glm::vec3 centreBaseModel;
-    float escalaModel;
-    // radi de l'escena
-    float radiEsc, radiEsc1, radiEsc2, radiEsc3, radiEsc4;
-    glm::vec3 centEsc;
-
-    typedef  enum {NONE, ROTATE} InteractiveAction;
-    InteractiveAction DoingInteractive;
-    int xClick, yClick, patricio;
-    float angleY, angleX;
+    int printOglError(const char file[], int line, const char func[]);
+    float alfa;
+    float alfac1 = 0.0;
+    float alfac2 = 120.0;
+    float alfac3 = 240.0;
+    float c1 = 4.0;
+    float c2 = 5.0;
+    float c3 = 6.0;
+    bool cubo = true;
+    bool foco = false;
 };
